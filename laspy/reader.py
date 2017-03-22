@@ -2,4 +2,6 @@
 # _*_ coding:utf-8 _*_
 
 
-la
+import laspy
+
+infile  = laspy.file.File("read_pc.las",mode="r")
