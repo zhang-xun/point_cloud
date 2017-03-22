@@ -219,7 +219,7 @@ class Canvas(app.Canvas):
         ps = self.pixel_scale
 
         # Create vertices
-        n = 10000000
+        n = 5000000
         data = np.zeros(n, [('a_position', np.float32, 3),
                             ('a_bg_color', np.float32, 4),
                             ('a_fg_color', np.float32, 4),
@@ -227,7 +227,8 @@ class Canvas(app.Canvas):
         data['a_position'] = 0.45 * np.random.randn(n, 3)
         data['a_bg_color'] = np.random.uniform(0.85, 1.00, (n, 4))
         data['a_fg_color'] = 0, 0, 0, 1
-        data['a_size'] = np.random.uniform(5*ps, 10*ps, n)
+        #data['a_size'] = np.random.uniform(5*ps, 10*ps, n)
+        data['a_size'] = np.random.uniform(1, 1, n)
         u_linewidth = 1.0
         u_antialias = 1.0
 
