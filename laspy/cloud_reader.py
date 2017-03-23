@@ -221,16 +221,34 @@ class Canvas(app.Canvas):
         ps = self.pixel_scale
 
         # Create vertices
-        n = 5000000
+        infile = laspy.file.File("read_pc.las", mode="r")
+        point_record = infile.points
+        n = point_record.size
+        for i in point_record[:,0:3]:
+            print i
+
         data = np.zeros(n, [('a_position', np.float32, 3),
                             ('a_bg_color', np.float32, 4),
                             ('a_fg_color', np.float32, 4),
                             ('a_size', np.float32, 1)])
-        data['a_position'] = 0.45 * np.random.randn(n, 3)
-        data['a_bg_color'] = np.random.uniform(0.85, 1.00, (n, 4))
-        data['a_fg_color'] = 0, 0, 0, 1
-        #data['a_size'] = np.random.uniform(5*ps, 10*ps, n)
-        data['a_size'] = np.random.uniform(1, 1, n)
+        print ("___"*60,"data.dtype")
+
+        print(data.dtype)
+
+        data["a_postion"] = point_record[:,0:3]
+        data["a_bg_color"] = np.random.uniform(0.85, 1.00, (n, 4))
+        data["a_fg_color"] = 0,0,0,1
+        data["a_size"] = np.random.uniform(1,1,point_record.size)
+
+        print("***$^^^" * 20)
+        print(point_record)
+
+
+        # data['a_position'] = 0.45 * np.random.randn(n, 3)
+        # data['a_bg_color'] = np.random.uniform(0.85, 1.00, (n, 4))
+        # data['a_fg_color'] = 0, 0, 0, 1
+        # #data['a_size'] = np.random.uniform(5*ps, 10*ps, n)
+        # data['a_size'] = np.random.uniform(1, 1, n)
         u_linewidth = 1.0
         u_antialias = 1.0
 
@@ -268,6 +286,10 @@ class Canvas(app.Canvas):
 
         infile = laspy.file.File("read_pc.las",mode="r")
         point_record = infile.points
+
+
+
+
 
     def on_key_press(self, event):
         if event.text == ' ':
