@@ -221,27 +221,37 @@ class Canvas(app.Canvas):
         ps = self.pixel_scale
 
         # Create vertices
-        infile = laspy.file.File("read_pc.las", mode="r")
+        infile = laspy.file.File("example2.las", mode="r")
         point_record = infile.points
         n = point_record.size
-        for i in point_record[:,0:3]:
-            print i
+        x = point_record["point"]["X"]
+        y = point_record["point"]["Y"]
+        z = point_record["point"]["Z"]
+
+
+
+        points = np.vstack((infile.x,infile.y,infile.z)).transpose()
+        print points.ndim
+        print points.shape
+        print points[0].dtype
+
 
         data = np.zeros(n, [('a_position', np.float32, 3),
                             ('a_bg_color', np.float32, 4),
                             ('a_fg_color', np.float32, 4),
                             ('a_size', np.float32, 1)])
-        print ("___"*60,"data.dtype")
+        print ("___"*30,"data.dtype")
 
-        print(data.dtype)
 
-        data["a_postion"] = point_record[:,0:3]
+
+        data["a_position"] = points.astype(np.float32)
         data["a_bg_color"] = np.random.uniform(0.85, 1.00, (n, 4))
         data["a_fg_color"] = 0,0,0,1
-        data["a_size"] = np.random.uniform(1,1,point_record.size)
+        data["a_size"] = np.random.uniform(10, 10, n)
 
         print("***$^^^" * 20)
-        print(point_record)
+        print data
+
 
 
         # data['a_position'] = 0.45 * np.random.randn(n, 3)
@@ -299,8 +309,8 @@ class Canvas(app.Canvas):
                 self.timer.start()
 
     def on_timer(self, event):
-        self.theta += .5
-        self.phi += .5
+        self.theta += .0005
+        self.phi += .0005
         self.model = np.dot(rotate(self.theta, (0, 0, 1)),
                             rotate(self.phi, (0, 1, 0)))
         self.program['u_model'] = self.model
@@ -311,7 +321,7 @@ class Canvas(app.Canvas):
 
     def on_mouse_wheel(self, event):
         self.translate -= event.delta[1]
-        self.translate = max(2, self.translate)
+        self.translate = max(2000, self.translate)
         self.view = translate((0, 0, -self.translate))
 
         self.program['u_view'] = self.view
@@ -323,7 +333,7 @@ class Canvas(app.Canvas):
         self.program.draw('points')
 
     def apply_zoom(self):
-        gloo.set_viewport(0, 0, self.physical_size[0], self.physical_size[1])
+        gloo.set_viewport(63049995, 483474917, self.physical_size[0], self.physical_size[1])
         self.projection = perspective(45.0, self.size[0] /
                                       float(self.size[1]), 1.0, 1000.0)
         self.program['u_projection'] = self.projection
