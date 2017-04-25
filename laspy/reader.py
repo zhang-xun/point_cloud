@@ -6,6 +6,7 @@ import numpy as np
 def main():
     infile = laspy.file.File("read_pc.las",mode="r")
     point_record = infile.points              #numpy.ndarray
+    print (infile.read(1000))
     print "*****" * 200
     """
     print point_record.size 213093
@@ -46,7 +47,8 @@ def main():
     print("*"*40)
     header_format = infile.header.header_format
     for spec in header_format:
-        print(spec.name)
+        print(type(spec))
+        #print spec.dtype
         print spec.xml()
 
     print(infile.header.max)
